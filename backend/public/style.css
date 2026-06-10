@@ -1,0 +1,254 @@
+/* body {
+    font-family: sans-serif;
+    text-align: center;
+    background: #f0f4f8;
+    padding: 50px;
+}
+
+.container {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 10px;
+    width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+input {
+    padding: 8px;
+    width: 70%;
+}
+
+button {
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.weather {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8fbff;
+    border-radius: 10px;
+}
+
+.weather #cityName {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.weather #temperature {
+    font-size: 36px;
+    font-weight: bold;
+    color: #646362;
+    margin: 5px 0;
+}
+
+.weather #description {
+    font-size: 16px;
+    color: #3a3b3b;
+}
+
+.weather #weatherIcon {
+    width: 80px;
+    height: 80px;
+}
+
+
+.forecast {
+    margin-top: 30px;
+}
+
+.forecast h2 {
+    font-size: 16px;
+    color: #194e79;
+    margin-bottom: 10px;
+}
+
+#forecastList {
+    display: flex;
+    justify-content: space-around;
+}
+
+#forecastList div {
+    background: #d0e5fa;
+    border-radius: 8px;
+    padding: 10px 8px;
+    width: 18%;
+    font-size: 13px;
+}
+
+#forecastList div p {
+    margin: 4px 0;
+}
+
+#forecastList img {
+    width: 45px;
+    height: 45px;
+} */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px 20px;
+    border-radius: 20px;
+    width: 500px;
+    margin: auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 10px 16px;
+    width: 65%;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background: #e94560;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #c73652;
+}
+
+#errorMessage {
+    color: #ff6b6b;
+    font-size: 13px;
+    margin: 8px 0;
+    min-height: 18px;
+}
+
+.weather {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+#cityName {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+#temperature {
+    font-size: 52px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#description {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+#weatherIcon {
+    width: 80px;
+    height: 80px;
+}
+
+.forecast {
+    margin-top: 20px;
+}
+
+.forecast h2 {
+    font-size: 14px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+#forecastList {
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+}
+
+#forecastList div {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 8px;
+    width: 18%;
+    font-size: 13px;
+}
+
+#forecastList img {
+    width: 40px;
+    height: 40px;
+}
+
+.history {
+    margin-top: 20px;
+}
+
+.history h2 {
+    font-size: 14px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+#historyList {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+#historyList li {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#historyList li:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
