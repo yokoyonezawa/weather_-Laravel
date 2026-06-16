@@ -26,7 +26,6 @@ document
         }
         localStorage.setItem("history", JSON.stringify(history));
         showHistory();
-        console.log(history);
 
         document.getElementById("errorMessage").textContent = "";
 
@@ -107,9 +106,6 @@ document.getElementById("locationBtn").addEventListener("click", function () {
             fetchWeatherByCoords(lat, lon);
         },
         function (error) {
-            console.log("位置情報取得失敗！");
-            console.log(error.code);
-            console.log(error.message);
             document.getElementById("errorMessage").textContent =
                 "現在地を取得できませんでした！";
         },
@@ -117,8 +113,6 @@ document.getElementById("locationBtn").addEventListener("click", function () {
 });
 
 async function fetchWeatherByCoords(lat, lon) {
-    console.log("緯度：" + lat);
-    console.log("経度：" + lon);
     const response = await fetch(
         `http://localhost/api/weather?lat=${lat}&lon=${lon}`,
     );
