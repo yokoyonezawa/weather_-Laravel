@@ -10,7 +10,7 @@ document
         }
 
         const response = await fetch(
-            `http://localhost/api/weather?city=${city}`,
+            `http://localhost/api/weather?city=${encodeURIComponent(city)}`,
         );
         const data = await response.json();
 
@@ -31,7 +31,7 @@ document
 
         // 現在の天気（list[0]が一番近い時間）
         const current = data.list[0];
-        document.getElementById("cityName").textContent = data.city.name;
+        document.getElementById("cityName").textContent = city;
         document.getElementById("temperature").textContent =
             `気温：${current.main.temp.toFixed(1)}℃`;
         document.getElementById("description").textContent =

@@ -22,8 +22,22 @@ Route::get('/weather', function (Request $request) {
     $apiKey = env('OPENWEATHER_API_KEY');
 
     if ($request->query('city')) {
-        $city = $request->query('city');
-        $url = "https://api.openweathermap.org/data/2.5/forecast?q={$city}&appid={$apiKey}&lang=ja&units=metric";
+    $city = $request->query('city');
+
+    $geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" . urlencode($city) . "&limit=1&appid={$apiKey}";
+    $geoResponse = file_get_contents($geoUrl);
+    $geoData = json_decode($geoResponse, true);
+
+    // 都市が見つからなかった場合
+    if (empty($geoData)) {
+        return response()->json(['cod' => '404', 'message' => '都市が見つかりませんでした'], 200);
+    }
+
+
+    $lat = $geoData[0]['lat'];
+    $lon = $geoData[0]['lon'];
+
+    $url = "https://api.openweathermap.org/data/2.5/forecast?lat={$lat}&lon={$lon}&appid={$apiKey}&lang=ja&units=metric";
     } else {
         $lat = $request->query('lat');
         $lon = $request->query('lon');
