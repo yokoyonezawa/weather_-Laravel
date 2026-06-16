@@ -1,0 +1,5 @@
+src/vendor/
+src/.env
+src/node_modules/
+docker/mysql/data/
+.DS_Store
