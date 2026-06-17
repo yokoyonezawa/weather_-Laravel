@@ -165,3 +165,121 @@ button:hover {
 #historyList li:hover {
     background: rgba(255, 255, 255, 0.25);
 }
+
+/* 下部固定ナビ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 20, 40, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bottom-nav button {
+    background: #e94560;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 25px;
+    white-space: nowrap;
+}
+
+.bottom-nav button:hover {
+    background: #c73652;
+}
+
+/* タブエリア */
+.tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+#tabList {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.tab-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.tab-item.active {
+    background: #e94560;
+    border-color: #e94560;
+}
+
+/* 検索モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #16213e;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    max-width: 550px;
+    margin: auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-content input {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+.modal-content input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.modal-content button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 25px;
+    background: #e94560;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.modal-content button:hover {
+    background: #c73652;
+}
+
+.remove-btn {
+    margin-left: 6px;
+    opacity: 0.7;
+    font-size: 12px;
+}
+
+.remove-btn:hover {
+    opacity: 1;
+}
