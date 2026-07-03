@@ -1,10 +1,158 @@
-// お気に入りを表示する関数
-function showFavorites() {
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+const API_BASE = "http://localhost/api";
+
+// トークン管理
+function getToken() {
+    return localStorage.getItem("token");
+}
+function setToken(token) {
+    localStorage.setItem("token", token);
+}
+function removeToken() {
+    localStorage.removeItem("token");
+}
+function isLoggedIn() {
+    return !!getToken();
+}
+
+// 認証ヘッダー
+function authHeaders() {
+    return {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+    };
+}
+
+// ===== 認証 =====
+
+async function register(name, email, password) {
+    const res = await fetch(`${API_BASE}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+    });
+    const data = await res.json();
+    if (data.token) {
+        setToken(data.token);
+        updateAuthUI();
+        showFavorites();
+    }
+    return data;
+}
+
+async function login(email, password) {
+    const res = await fetch(`${API_BASE}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (data.token) {
+        setToken(data.token);
+        updateAuthUI();
+        showFavorites();
+    }
+    return data;
+}
+
+async function logout() {
+    await fetch(`${API_BASE}/logout`, {
+        method: "POST",
+        headers: authHeaders(),
+    });
+    removeToken();
+    updateAuthUI();
+    showFavorites();
+}
+
+// ===== お気に入り（DB連携） =====
+
+async function getFavorites() {
+    if (!isLoggedIn()) {
+        return JSON.parse(localStorage.getItem("favorites")) || [];
+    }
+    const res = await fetch(`${API_BASE}/favorites`, {
+        headers: authHeaders(),
+    });
+    const data = await res.json();
+    return data.map((f) => f.city);
+}
+
+async function addFavorite(city) {
+    if (!isLoggedIn()) {
+        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        if (favorites.includes(city))
+            return { message: "すでに追加されています" };
+        if (favorites.length >= 5)
+            return { message: "お気に入りは5件までです" };
+        favorites.push(city);
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+        return { success: true };
+    }
+    const res = await fetch(`${API_BASE}/favorites`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ city }),
+    });
+    return res.json();
+}
+
+async function removeFavorite(city) {
+    if (!isLoggedIn()) {
+        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        localStorage.setItem(
+            "favorites",
+            JSON.stringify(favorites.filter((f) => f !== city)),
+        );
+        return;
+    }
+    await fetch(`${API_BASE}/favorites/${encodeURIComponent(city)}`, {
+        method: "DELETE",
+        headers: authHeaders(),
+    });
+}
+
+// ===== UI =====
+
+function updateAuthUI() {
+    const authArea = document.getElementById("authArea");
+    if (isLoggedIn()) {
+        authArea.innerHTML = `<button id="logoutBtn">ログアウト</button>`;
+        document.getElementById("logoutBtn").addEventListener("click", logout);
+    } else {
+        authArea.innerHTML = `
+            <button id="showLoginBtn">ログイン</button>
+            <button id="showRegisterBtn">新規登録</button>
+        `;
+        document
+            .getElementById("showLoginBtn")
+            .addEventListener("click", () => showAuthModal("login"));
+        document
+            .getElementById("showRegisterBtn")
+            .addEventListener("click", () => showAuthModal("register"));
+    }
+}
+
+function showAuthModal(mode) {
+    const modal = document.getElementById("authModal");
+    const title = document.getElementById("authModalTitle");
+    const nameField = document.getElementById("authNameField");
+
+    if (mode === "login") {
+        title.textContent = "ログイン";
+        nameField.style.display = "none";
+    } else {
+        title.textContent = "新規登録";
+        nameField.style.display = "block";
+    }
+    modal.dataset.mode = mode;
+    modal.style.display = "block";
+}
+
+async function showFavorites() {
+    const favorites = await getFavorites();
     const tabList = document.getElementById("tabList");
     tabList.innerHTML = "";
 
-    // 現在地タブ
     const locationTab = document.createElement("div");
     locationTab.className = "tab-item";
     locationTab.textContent = "📍 現在地";
@@ -14,26 +162,20 @@ function showFavorites() {
     };
     tabList.appendChild(locationTab);
 
-    // お気に入りタブ
     favorites.forEach(function (city) {
         const tab = document.createElement("div");
         tab.className = "tab-item";
         tab.innerHTML = `${city} <span class="remove-btn">×</span>`;
 
-        // タブをクリックしたら天気を表示
         tab.onclick = function (e) {
             if (e.target.classList.contains("remove-btn")) return;
             setActiveTab(tab);
             searchCity(city);
         };
 
-        // ×ボタンをクリックしたら削除
-        tab.querySelector(".remove-btn").onclick = function (e) {
+        tab.querySelector(".remove-btn").onclick = async function (e) {
             e.stopPropagation();
-            const favorites =
-                JSON.parse(localStorage.getItem("favorites")) || [];
-            const newFavorites = favorites.filter((f) => f !== city);
-            localStorage.setItem("favorites", JSON.stringify(newFavorites));
+            await removeFavorite(city);
             showFavorites();
         };
 
@@ -41,24 +183,20 @@ function showFavorites() {
     });
 }
 
-// アクティブタブを設定
 function setActiveTab(activeTab) {
-    document.querySelectorAll(".tab-item").forEach(function (tab) {
-        tab.classList.remove("active");
-    });
+    document
+        .querySelectorAll(".tab-item")
+        .forEach((tab) => tab.classList.remove("active"));
     activeTab.classList.add("active");
 }
 
-// 天気を表示する関数
 function displayWeather(data, cityName) {
     if (data.cod !== "200") {
         document.getElementById("errorMessage").textContent =
             "都市が見つかりませんでした！";
         return;
     }
-
     document.getElementById("errorMessage").textContent = "";
-
     const current = data.list[0];
     document.getElementById("cityName").textContent =
         cityName || data.city.name;
@@ -79,35 +217,25 @@ function displayWeather(data, cityName) {
     ];
     const forecastList = document.getElementById("forecastList");
     forecastList.innerHTML = "";
-
     forecasts.forEach(function (item) {
         const date = new Date(item.dt * 1000);
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const temp = item.main.temp.toFixed(1);
-        const desc = item.weather[0].description;
-        const icon = item.weather[0].icon;
-
         forecastList.innerHTML += `
             <div>
-                <p>${month}/${day}</p>
-                <img src="https://openweathermap.org/img/wn/${icon}@2x.png">
-                <p>${temp}℃</p>
-                <p>${desc}</p>
+                <p>${date.getMonth() + 1}/${date.getDate()}</p>
+                <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png">
+                <p>${item.main.temp.toFixed(1)}℃</p>
+                <p>${item.weather[0].description}</p>
             </div>
         `;
     });
 }
 
-// 都市名で検索
 async function searchCity(city) {
     const response = await fetch(
-        `http://localhost/api/weather?city=${encodeURIComponent(city)}`,
+        `${API_BASE}/weather?city=${encodeURIComponent(city)}`,
     );
     const data = await response.json();
     displayWeather(data, city);
-
-    // 検索履歴に保存
     const history = JSON.parse(localStorage.getItem("history")) || [];
     history.unshift(city);
     if (history.length > 5) history.pop();
@@ -115,42 +243,39 @@ async function searchCity(city) {
     showHistory();
 }
 
-// 現在地で検索
 function getLocationWeather() {
     navigator.geolocation.getCurrentPosition(
         async function (position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
+            const { latitude: lat, longitude: lon } = position.coords;
             const response = await fetch(
-                `http://localhost/api/weather?lat=${lat}&lon=${lon}`,
+                `${API_BASE}/weather?lat=${lat}&lon=${lon}`,
             );
             const data = await response.json();
             displayWeather(data, data.city.name);
         },
-        function (error) {
+        function () {
             document.getElementById("errorMessage").textContent =
                 "現在地を取得できませんでした！";
         },
     );
 }
 
-// 履歴を表示する関数
 function showHistory() {
     const history = JSON.parse(localStorage.getItem("history")) || [];
     const historyList = document.getElementById("historyList");
     historyList.innerHTML = "";
-
     history.forEach(function (city) {
         historyList.innerHTML += `<li onclick="searchCity('${city}')">${city}</li>`;
     });
 }
 
-// 検索ボタン
+// ===== イベント =====
+
 document
     .getElementById("searchBtn")
     .addEventListener("click", async function () {
         const city = document.getElementById("city").value;
-        if (city === "") {
+        if (!city) {
             document.getElementById("errorMessage").textContent =
                 "都市名を入力してください！";
             return;
@@ -159,68 +284,82 @@ document
         await searchCity(city);
     });
 
-// Enterキーで検索
-document.getElementById("city").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        document.getElementById("searchBtn").click();
-    }
+document.getElementById("city").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") document.getElementById("searchBtn").click();
 });
 
-// 検索モーダルを開く
 document.getElementById("searchNavBtn").addEventListener("click", function () {
     const modal = document.getElementById("searchModal");
     modal.style.display = modal.style.display === "block" ? "none" : "block";
 });
 
-// モーダルを閉じる
 document.getElementById("closeModal").addEventListener("click", function () {
     document.getElementById("searchModal").style.display = "none";
 });
 
-// 現在地ボタン
 document.getElementById("locationBtn").addEventListener("click", function () {
-    const tabs = document.querySelectorAll(".tab-item");
-    setActiveTab(tabs[0]);
+    setActiveTab(document.querySelectorAll(".tab-item")[0]);
     getLocationWeather();
 });
 
-// お気に入りに追加
 document
     .getElementById("addFavoriteBtn")
-    .addEventListener("click", function () {
+    .addEventListener("click", async function () {
         const cityName = document.getElementById("cityName").textContent;
         if (!cityName) {
             document.getElementById("errorMessage").textContent =
                 "先に都市を検索してください！";
             return;
         }
-
-        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-        if (favorites.includes(cityName)) {
+        const result = await addFavorite(cityName);
+        if (result.message) {
             document.getElementById("errorMessage").textContent =
-                "すでにお気に入りに追加されています！";
-            return;
-        }
-
-        if (favorites.length >= 5) {
+                result.message;
+        } else {
+            await showFavorites();
             document.getElementById("errorMessage").textContent =
-                "お気に入りは5件までです！";
-            return;
+                "お気に入りに追加しました！";
         }
-
-        favorites.push(cityName);
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-        showFavorites();
-        document.getElementById("errorMessage").textContent =
-            "お気に入りに追加しました！";
     });
 
-// 初期化
+// 認証モーダルの送信
+document
+    .getElementById("authSubmitBtn")
+    .addEventListener("click", async function () {
+        const mode = document.getElementById("authModal").dataset.mode;
+        const email = document.getElementById("authEmail").value;
+        const password = document.getElementById("authPassword").value;
+
+        if (mode === "login") {
+            const result = await login(email, password);
+            if (result.message) {
+                document.getElementById("authError").textContent =
+                    result.message;
+                return;
+            }
+        } else {
+            const name = document.getElementById("authName").value;
+            const result = await register(name, email, password);
+            if (result.message) {
+                document.getElementById("authError").textContent =
+                    result.message;
+                return;
+            }
+        }
+        document.getElementById("authModal").style.display = "none";
+    });
+
+document
+    .getElementById("closeAuthModal")
+    .addEventListener("click", function () {
+        document.getElementById("authModal").style.display = "none";
+    });
+
+// ===== 初期化 =====
+updateAuthUI();
 showFavorites();
 showHistory();
 
-// ページ読み込み時に現在地の天気を取得
 const firstTab = document.querySelector(".tab-item");
 if (firstTab) {
     setActiveTab(firstTab);

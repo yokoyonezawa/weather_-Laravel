@@ -166,18 +166,19 @@ button:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* 下部固定ナビ */
 .bottom-nav {
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 550px;
     background: rgba(15, 20, 40, 0.95);
     backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-around;
     padding: 12px 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px 20px 0 0;
 }
 
 .bottom-nav button {
@@ -282,4 +283,64 @@ button:hover {
 
 .remove-btn:hover {
     opacity: 1;
+}
+
+/* 認証エリア */
+.auth-area {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+/* 認証モーダル */
+.auth-modal-content {
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-modal-content h3 {
+    color: white;
+    margin-bottom: 4px;
+}
+
+.auth-modal-content input {
+    width: 100%;
+}
+
+/* レスポンシブ */
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        border-radius: 0;
+        padding: 20px 16px;
+    }
+
+    .bottom-nav {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    #forecastList div {
+        font-size: 11px;
+        padding: 8px 4px;
+    }
+
+    #temperature {
+        font-size: 24px;
+    }
+
+    #cityName {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .container {
+        width: 90%;
+    }
+
+    .bottom-nav {
+        width: 90%;
+    }
 }
