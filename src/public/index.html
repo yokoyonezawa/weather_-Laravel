@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お天気アプリ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- タブエリア -->
+        <div class="tabs">
+            <div id="tabList"></div>
+        </div>
+
+        <!-- 天気表示エリア -->
+        <div class="weather">
+            <p id="cityName"></p>
+            <p id="temperature"></p>
+            <p id="description"></p>
+            <img id="weatherIcon" src="" alt="" style="display: none;">
+        </div>
+
+        <!-- 5日間予報 -->
+        <div class="forecast">
+            <h2>5日間予報</h2>
+            <div id="forecastList"></div>
+        </div>
+
+        <!-- 検索履歴 -->
+        <div class="history">
+            <h2>検索履歴</h2>
+            <ul id="historyList"></ul>
+        </div>
+
+        <p id="errorMessage"></p>
+
+    </div>
+
+    <!-- 下部固定ナビ -->
+    <div class="bottom-nav">
+        <button id="locationBtn">📍 現在地</button>
+        <button id="searchNavBtn">🔍 検索</button>
+        <button id="addFavoriteBtn">⭐ 追加</button>
+    </div>
+
+    <!-- 検索モーダル -->
+    <div class="modal" id="searchModal">
+        <div class="modal-content">
+            <input type="text" id="city" placeholder="都市名を入力">
+            <button id="searchBtn">検索</button>
+            <button id="closeModal">閉じる</button>
+        </div>
+    </div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

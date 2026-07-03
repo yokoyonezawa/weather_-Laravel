@@ -1,0 +1,285 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px 20px;
+    border-radius: 20px;
+    width: 550px;
+    margin: auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 10px 16px;
+    width: 65%;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background: #e94560;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #c73652;
+}
+
+#errorMessage {
+    color: #ff6b6b;
+    font-size: 13px;
+    margin: 8px 0;
+    min-height: 18px;
+}
+
+.weather {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+#cityName {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+#temperature {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#description {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+#weatherIcon {
+    width: 80px;
+    height: 80px;
+    display: block;
+    margin: 0 auto;
+}
+
+.forecast {
+    margin-top: 20px;
+}
+
+.forecast h2 {
+    font-size: 14px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+#forecastList {
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+}
+
+#forecastList div {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 8px;
+    width: 18%;
+    font-size: 13px;
+}
+
+#forecastList img {
+    width: 40px;
+    height: 40px;
+}
+
+.history {
+    margin-top: 20px;
+}
+
+.history h2 {
+    font-size: 14px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+#historyList {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+#historyList li {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#historyList li:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* 下部固定ナビ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 20, 40, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bottom-nav button {
+    background: #e94560;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 25px;
+    white-space: nowrap;
+}
+
+.bottom-nav button:hover {
+    background: #c73652;
+}
+
+/* タブエリア */
+.tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+#tabList {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.tab-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.tab-item.active {
+    background: #e94560;
+    border-color: #e94560;
+}
+
+/* 検索モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #16213e;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    max-width: 550px;
+    margin: auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-content input {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+.modal-content input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.modal-content button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 25px;
+    background: #e94560;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.modal-content button:hover {
+    background: #c73652;
+}
+
+.remove-btn {
+    margin-left: 6px;
+    opacity: 0.7;
+    font-size: 12px;
+}
+
+.remove-btn:hover {
+    opacity: 1;
+}
