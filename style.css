@@ -1,93 +1,3 @@
-/* body {
-    font-family: sans-serif;
-    text-align: center;
-    background: #f0f4f8;
-    padding: 50px;
-}
-
-.container {
-    background: white;
-    padding: 30px 20px;
-    border-radius: 10px;
-    width: 500px;
-    margin: auto;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-input {
-    padding: 8px;
-    width: 70%;
-}
-
-button {
-    padding: 8px 12px;
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-.weather {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f8fbff;
-    border-radius: 10px;
-}
-
-.weather #cityName {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.weather #temperature {
-    font-size: 36px;
-    font-weight: bold;
-    color: #646362;
-    margin: 5px 0;
-}
-
-.weather #description {
-    font-size: 16px;
-    color: #3a3b3b;
-}
-
-.weather #weatherIcon {
-    width: 80px;
-    height: 80px;
-}
-
-
-.forecast {
-    margin-top: 30px;
-}
-
-.forecast h2 {
-    font-size: 16px;
-    color: #194e79;
-    margin-bottom: 10px;
-}
-
-#forecastList {
-    display: flex;
-    justify-content: space-around;
-}
-
-#forecastList div {
-    background: #d0e5fa;
-    border-radius: 8px;
-    padding: 10px 8px;
-    width: 18%;
-    font-size: 13px;
-}
-
-#forecastList div p {
-    margin: 4px 0;
-}
-
-#forecastList img {
-    width: 45px;
-    height: 45px;
-} */
-
 * {
     margin: 0;
     padding: 0;
@@ -124,11 +34,12 @@ h1 {
     gap: 10px;
     justify-content: center;
     margin-bottom: 10px;
+    flex-wrap: nowrap;
 }
 
 input {
     padding: 10px 16px;
-    width: 65%;
+    width: 50%;
     border: none;
     border-radius: 25px;
     background: rgba(255, 255, 255, 0.2);
@@ -142,13 +53,14 @@ input::placeholder {
 }
 
 button {
-    padding: 10px 20px;
+    padding: 10px 14px;
     border: none;
     border-radius: 25px;
     background: #e94560;
     color: white;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 button:hover {
