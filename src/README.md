@@ -1,64 +1,84 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# お天気予報アプリ
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+OpenWeatherMap APIを使用した天気予報アプリです。ユーザー認証機能を持ち、お気に入りの都市をデータベースに保存できます。
 
-## About Laravel
+## 使用技術
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **PHP** 8.3.13
+- **Laravel** 8.83.29
+- **MySQL** 8.0.26
+- **Laravel Sanctum**（API認証）
+- **OpenWeatherMap API**（天気データ取得）
+- **Docker / Docker Compose**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 機能
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- 現在地の天気表示
+- 都市名での天気検索
+- 5日間予報の表示
+- 検索履歴の保存
+- ユーザー登録・ログイン・ログアウト
+- お気に入り都市のDB保存・取得・削除（最大5件）
+- レスポンシブデザイン（PC・タブレット・スマホ対応）
 
-## Learning Laravel
+## セットアップ
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. リポジトリをクローン
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone git@github.com:yokoyonezawa/weather_-Laravel.git
+cd weather_-Laravel
+```
 
-## Laravel Sponsors
+### 2. 環境変数の設定
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```bash
+cp .env.example .env
+```
 
-### Premium Partners
+`.env`を編集して以下を設定：
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=（任意のパスワード）
 
-## Contributing
+OPENWEATHER_API_KEY=（OpenWeatherMap APIキー）
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Dockerコンテナを起動
 
-## Code of Conduct
+```bash
+docker-compose up -d
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. コンテナに入ってセットアップ
 
-## Security Vulnerabilities
+```bash
+docker exec -it weather-laravel-php-1 bash
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer install
+php artisan key:generate
+php artisan migrate
+```
 
-## License
+### 5. アクセス
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+ブラウザで `http://localhost` を開く
+
+## API エンドポイント
+
+| メソッド | エンドポイント | 説明 | 認証 |
+|--------|-------------|------|------|
+| GET | /api/weather | 天気取得（city or lat/lon） | 不要 |
+| POST | /api/register | ユーザー登録 | 不要 |
+| POST | /api/login | ログイン | 不要 |
+| POST | /api/logout | ログアウト | 必要 |
+| GET | /api/favorites | お気に入り一覧 | 必要 |
+| POST | /api/favorites | お気に入り追加 | 必要 |
+| DELETE | /api/favorites/{city} | お気に入り削除 | 必要 |
