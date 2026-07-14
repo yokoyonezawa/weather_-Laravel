@@ -36,7 +36,18 @@ cd weather_-Laravel
 cp src/.env.example src/.env
 \`\`\`
 
-src/.envを編集してOPENWEATHER_API_KEYにAPIキーを入れる
+`src/.env`を編集して以下を設定：
+
+```
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+
+OPENWEATHER_API_KEY=（OpenWeatherMap APIキー）
+```
 
 ### 3. Dockerコンテナを起動
 
@@ -58,4 +69,16 @@ php artisan migrate
 
 ### 5. アクセス
 
-ブラウザで http://localhost/index.html を開く
+ブラウザで `http://localhost/index.html` を開く
+
+## API エンドポイント
+
+| メソッド | エンドポイント | 説明 | 認証 |
+| -------- | --------------------- | --------------------------- | ---- |
+| GET      | /api/weather          | 天気取得（city or lat/lon） | 不要 |
+| POST     | /api/register         | ユーザー登録                | 不要 |
+| POST     | /api/login            | ログイン                    | 不要 |
+| POST     | /api/logout           | ログアウト                  | 必要 |
+| GET      | /api/favorites        | お気に入り一覧              | 必要 |
+| POST     | /api/favorites        | お気に入り追加              | 必要 |
+| DELETE   | /api/favorites/{city} | お気に入り削除              | 必要 |
